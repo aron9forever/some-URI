@@ -55,7 +55,7 @@ class JobController extends Controller
         ]);
 
         /*if($property = Property::find($request->property_address)) {*/
-            return $property->jobs()->create($request->only['supplier_title', 'job_type', 'notes']);
+            return $property->jobs()->create($request->only(['supplier_title', 'job_type', 'notes']));
             /*}
 
         //This shouldn't happen unless someone is tampering with the forms or manually POSTing
@@ -100,7 +100,7 @@ class JobController extends Controller
             'notes' => 'max:65000'
         ]);
 
-        return $job->update($request->only['property_address', 'supplier_title', 'job_type', 'notes']);
+        return $job->update($request->only(['property_address', 'supplier_title', 'job_type', 'notes']));
     }
 
     /**

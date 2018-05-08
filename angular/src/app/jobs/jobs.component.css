@@ -1,0 +1,13 @@
+input {
+    width: 100%;
+}
+
+tbody>tr:hover {
+    background-color: #e9ecef;
+    cursor:pointer;
+}
+
+tbody>tr.selected {
+    background-color: #e9ecef;
+    border: 2px dotted black;
+}

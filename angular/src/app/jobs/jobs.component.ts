@@ -1,4 +1,5 @@
 import { Job } from '../job';
+import { JobService } from '../job.service';
 import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
 
@@ -8,16 +9,24 @@ import * as $ from 'jquery';
   styleUrls: ['./jobs.component.css']
 })
 export class JobsComponent implements OnInit {
+  selectedJob: Job;
+  jobs: Job[];
+  constructor(private jobService: JobService) { }
 
-  job: Job = {
-      id: 1,
-      notes: '~Wooosh'
-  };
+  onSelect(job: Job): void {
+    if(this.selectedJob === job)
+      this.selectedJob = undefined;
+    else
+      this.selectedJob = job;
+  }
 
-
-  constructor() { }
+  getJobs(): void {
+    this.jobService.getJobs()
+      .subscribe(jobs => this.jobs = jobs);
+  }
 
   ngOnInit() {
+    this.getJobs();
   }
 
 }

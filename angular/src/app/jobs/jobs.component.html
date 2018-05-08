@@ -1,5 +1,28 @@
-<div>
-    <label>Notes:
-      <input [(ngModel)]="job.notes" placeholder="notes">
-    </label>
+<div *ngIf="selectedJob">
+Selected  job: {{ selectedJob.notes }}
 </div>
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Address</th>
+      <th scope="col">Supplier</th>
+      <th scope="col">Job Type</th>
+      <th scope="col">Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let job of jobs"
+    (click)="onSelect(job)"
+    [class.selected]="job === selectedJob">
+      <th scope="row">{{ job.property_address }}</th>
+      <td>{{ job.supplier_title }}</td>
+      <td>{{ job.job_type }}</td>
+      <td>
+        <div>
+        <span *ngIf="job !== selectedJob">{{ job.notes }}</span>
+        <input (click)="$event.stopPropagation()" *ngIf="job === selectedJob" [(ngModel)]="job.notes" placeholder="notes">
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
