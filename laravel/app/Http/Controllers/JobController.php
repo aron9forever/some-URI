@@ -100,7 +100,8 @@ class JobController extends Controller
             'notes' => 'max:65000'
         ]);
 
-        return $job->update($request->only(['property_address', 'supplier_title', 'job_type', 'notes']));
+        $job->update($request->only(['property_address', 'supplier_title', 'job_type', 'notes']));
+        return response()->json('', 200);
     }
 
     /**

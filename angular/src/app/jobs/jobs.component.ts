@@ -13,9 +13,15 @@ export class JobsComponent implements OnInit {
   jobs: Job[];
   constructor(private jobService: JobService) { }
 
+  deselect(): void {
+    this.jobService.saveJob(this.selectedJob)
+    .subscribe();
+    this.selectedJob = undefined;
+  }
+
   onSelect(job: Job): void {
     if(this.selectedJob === job)
-      this.selectedJob = undefined;
+      this.deselect();
     else
       this.selectedJob = job;
   }
