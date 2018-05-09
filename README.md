@@ -1,7 +1,6 @@
 # Hi there.
 
-Some choppy hacks have been used to enable CORS for Laravel, as well as to enable these to work together
-in development mode. Check Laravel app bootstrap and Angular environment.ts.
+Some choppy hacks have been used to enable CORS for Laravel, as well as to redirect Angular's requests to port 8000. Check Laravel app bootstrap and Angular environment.ts.
 
 ## Installation:
 
