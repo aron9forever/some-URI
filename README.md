@@ -9,3 +9,7 @@ Some choppy hacks have been used to enable CORS for Laravel, as well as to redir
 - import the file containing the scaffold database, either with phpMyAdmin or by running the query manually.
 - php artisan serve and ng serve in the laravel and angular folders respectively
 - View should be accessible at localhost:4200 and communicate with API at localhost:8000
+
+## Preview:
+
+![Screenshot of application](https://i.imgur.com/xxGuUhs.png)
