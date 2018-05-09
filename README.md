@@ -12,4 +12,7 @@ Some choppy hacks have been used to enable CORS for Laravel, as well as to redir
 
 ## Preview:
 
-![Screenshot of application](https://i.imgur.com/xxGuUhs.png)
+![Screenshot 1 of application](https://i.imgur.com/xxGuUhs.png)
+![Screenshot 2 of application](https://i.imgur.com/0m6ntIl.png)
+![Screenshot 3 of application](https://i.imgur.com/UqqNzQ0.png)
+![Screenshot 4 of application](https://i.imgur.com/ILULXoE.png)
