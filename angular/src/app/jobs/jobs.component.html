@@ -1,6 +1,5 @@
-<div *ngIf="selectedJob">
-Selected  job: {{ selectedJob.notes }}
-</div>
+<app-job-form></app-job-form>
+
 <table class="table">
   <thead class="thead-dark">
     <tr>
@@ -11,16 +10,69 @@ Selected  job: {{ selectedJob.notes }}
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let job of jobs"
+    <tr *ngFor="let job of jobService.jobs"
     (click)="onSelect(job)"
     [class.selected]="job === selectedJob">
-      <th scope="row">{{ job.property_address }}</th>
-      <td>{{ job.supplier_title }}</td>
-      <td>{{ job.job_type }}</td>
+      <th scope="row">
+        <div>
+            <span
+            *ngIf="job !== selectedJob">{{ job.property_address }}</span>
+
+            <div class="form-group"
+            (click)="$event.stopPropagation()"
+            *ngIf="job === selectedJob">
+              <select class="form-control"
+              [(ngModel)]="job.property_address">
+                <option *ngFor="let property of jobService.properties">{{ property.address }}</option>
+              </select>
+            </div>
+        </div>
+      </th>
+
       <td>
         <div>
-        <span *ngIf="job !== selectedJob">{{ job.notes }}</span>
-        <input (click)="$event.stopPropagation()" *ngIf="job === selectedJob" [(ngModel)]="job.notes" placeholder="notes">
+            <span
+            *ngIf="job !== selectedJob">{{ job.supplier_title }}</span>
+
+            <div class="form-group"
+            (click)="$event.stopPropagation()"
+            *ngIf="job === selectedJob">
+              <select class="form-control"
+              [(ngModel)]="job.supplier_title">
+                <option *ngFor="let supplier of jobService.suppliers">{{ supplier.title }}</option>
+              </select>
+            </div>
+        </div>
+      </td>
+
+      <td>
+        <div>
+            <span
+            *ngIf="job !== selectedJob">{{ job.job_type }}</span>
+
+            <div class="form-group"
+            (click)="$event.stopPropagation()"
+            *ngIf="job === selectedJob">
+              <select class="form-control"
+              [(ngModel)]="job.job_type">
+                <option *ngFor="let jobType of jobService.jobTypes">{{ jobType.title }}</option>
+              </select>
+            </div>
+        </div>
+      </td>
+
+      <td>
+        <div>
+            <span style="white-space: pre-line;"
+            *ngIf="job !== selectedJob">{{ job.notes }}</span>
+
+            <div class="form-group"
+            (click)="$event.stopPropagation()"
+            *ngIf="job === selectedJob">
+                <textarea class="form-control"
+                [(ngModel)]="job.notes"
+                ></textarea>
+            </div>
         </div>
       </td>
     </tr>

@@ -6,13 +6,15 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { JobsComponent } from './jobs/jobs.component';
-import { JobDetailComponent } from './job-detail/job-detail.component';
+import { AlertsComponent } from './alerts/alerts.component';
+import { JobFormComponent } from './job-form/job-form.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     JobsComponent,
-    JobDetailComponent
+    AlertsComponent,
+    JobFormComponent
   ],
   imports: [
     BrowserModule,

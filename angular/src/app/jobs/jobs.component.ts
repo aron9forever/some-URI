@@ -1,7 +1,9 @@
-import { Job } from '../job';
+import { Property } from '../property';
+import { Supplier } from '../supplier';
+import { Job, JobType } from '../job';
 import { JobService } from '../job.service';
 import { Component, OnInit } from '@angular/core';
-import * as $ from 'jquery';
+
 
 @Component({
   selector: 'app-jobs',
@@ -10,7 +12,9 @@ import * as $ from 'jquery';
 })
 export class JobsComponent implements OnInit {
   selectedJob: Job;
-  jobs: Job[];
+  model: Job;
+  persistentAlert;
+
   constructor(private jobService: JobService) { }
 
   deselect(): void {
@@ -20,19 +24,27 @@ export class JobsComponent implements OnInit {
   }
 
   onSelect(job: Job): void {
+
+
+    if(typeof this.persistentAlert !== 'undefined')
+      this.persistentAlert.despawn();
+
     if(this.selectedJob === job)
       this.deselect();
-    else
-      this.selectedJob = job;
-  }
+    else {
+      if(typeof this.selectedJob !== 'undefined')
+        this.jobService.saveJob(this.selectedJob)
+        .subscribe();
 
-  getJobs(): void {
-    this.jobService.getJobs()
-      .subscribe(jobs => this.jobs = jobs);
+      this.selectedJob = job;
+      this.persistentAlert = new Alert('info',
+      'You are editing a Job',
+      'To save, deselect the job by clicking it again, or by selecting another job.').persist();
+    }
   }
 
   ngOnInit() {
-    this.getJobs();
+
   }
 
 }

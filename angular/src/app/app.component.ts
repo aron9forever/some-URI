@@ -9,4 +9,7 @@ import { JobService } from './job.service';
 })
 export class AppComponent {
   title = 'Jobs for all';
+
+  constructor(private jobService: JobService) {
+  }
 }

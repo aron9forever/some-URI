@@ -1,0 +1,40 @@
+<form (ngSubmit)="onSubmit()" #jobForm="ngForm">
+  <div class="row">
+    <div class="col-6 col-sm-3">
+      <label>Property:
+        <select required id="property_address" class="form-control"
+        [(ngModel)]="model.property_address" name="property_address">
+          <option></option>
+          <option *ngFor="let property of jobService.properties">{{ property.address }}</option>
+        </select>
+      </label>
+    </div>
+    <div class="col-6 col-sm-3">
+      <label>Supplier:
+        <select required id="supplier_title" class="form-control"
+        [(ngModel)]="model.supplier_title" name="supplier_title">
+          <option></option>
+          <option *ngFor="let supplier of jobService.suppliers">{{ supplier.title }}</option>
+        </select>
+      </label>
+    </div>
+    <div class="col-4 col-sm-2">
+      <label>Type:
+        <select required id="job_type" class="form-control"
+        [(ngModel)]="model.job_type" name="job_type">
+          <option></option>
+          <option *ngFor="let jobType of jobService.jobTypes">{{ jobType.title }}</option>
+        </select>
+      </label>
+    </div>
+    <div class="col-6 col-sm-3">
+      <label>Notes:
+        <input id="notes" class="form-control"
+        [(ngModel)]="model.notes" name="notes">
+      </label>
+    </div>
+    <div class="col-2 col-sm-1">
+        <label><br/><button [disabled]="!jobForm.form.valid" type="submit" class="btn btn-outline-dark">Add</button></label>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,142 @@
+function Alert(type, title, content = '') {
+    //This is closer to a C static variable than a class property
+    if(typeof Alert.numAlerts == 'undefined') {
+        Alert.alertArray = [];
+        Alert.numAlerts = 0;
+    }
+
+    this.type = type;
+    this.title = title;
+    this.content = content;
+    this.autoHide = false;
+    this.persistent = false;
+
+    Alert.alertArray.push(this);
+
+    this.push = function() {
+        this.index = Alert.numAlerts++; //Incremented after assignment !
+
+        this.DOM = $('<div></div>', {
+            class: 'alert alert-overlay alert-dismissible mb-0 alert-' + this.type
+        });
+
+
+            this.titleSpan = $('<h4></h4>')
+            .text(this.title)
+            .css('margin-bottom', '0')
+            .appendTo(this.DOM);
+
+            this.contentSpan = $('<span></span>')
+            .text(this.content)
+            .appendTo(this.DOM);
+
+            this.hideSpan = $('<span></span>', {
+                class: 'alert-fademsg hidden-xs'
+            })
+            .text('CLICK TO HIDE')
+            .appendTo(this.DOM);
+
+        this.DOM.data('selfRef', this);
+        $('body').prepend(this.DOM);
+
+        this.updatePosition();
+        this.show();
+
+        if(this.autoHide) {
+            //console.log('will autohide in 3sec');
+            this.timeout = setTimeout(this.despawn.bind(this), 3000);
+        }
+
+        return this;
+    };
+
+    this.persist = function() {
+        this.autoHide = false;
+        this.push().persistent = true;
+        this.hideSpan.remove();
+
+        return this;
+    };
+
+    this.autoHide = function() {
+        this.autoHide = true;
+        this.push();
+
+        return this;
+    };
+
+    this.show = function(callback) {
+        //console.log('shown');
+        this.DOM.animate({
+            width: "100%",
+            opacity: "1.0"
+        }, 300, callback);
+    };
+
+    this.hide = function(callback) {
+        //console.log('hidden');
+        this.DOM.animate({
+            width: "30%",
+            opacity: "0.0"
+        }, 300, callback);
+    };
+
+    this.updatePosition = function() {
+        //console.log('updated position');
+        this.DOM.animate({
+            bottom: this.index * 60 + 'px'
+        }, 150);
+    };
+
+    this.despawn = function() {
+        //console.log('despawning');
+        if(this.timeout)
+            clearTimeout(this.timeout);
+        this.hide(this.purge);
+    };
+
+    //This method is only provided as a callback to other jquery animations
+    //'this' referenced the DOM and not the Alert object
+    this.purge = function() {
+        var tmpAlert = $(this).data('selfRef');
+        //console.log('DOM purging #' + tmpAlert.index);
+
+        //stacked alerts should cascade
+        for(i = tmpAlert.index + 1; i < Alert.numAlerts; i++) {
+            //console.log('   reposition #' + i);
+            var loopAlert = Alert.alertArray[i];
+            loopAlert.index--;
+            loopAlert.updatePosition();
+        }
+
+        Alert.alertArray.splice(tmpAlert.index, 1);
+        Alert.numAlerts--;
+        $(this).remove();
+    };
+}
+
+Alert.handleJson = function(response) {
+    if(!response.ignore) {
+        if(!response.flag) {
+            new Alert(
+                response.type,
+                response.title,
+                response.content
+            ).push();
+        }
+        else {
+            new Alert(
+                response.type,
+                response.title,
+                response.content
+            ).persist();
+        }
+    }
+};
+
+$(document).on("click", '.alert-dismissible', function(event) {
+    var clickedAlert = $(this).data('selfRef');
+
+    if(!clickedAlert.persistent)
+        clickedAlert.despawn();
+});

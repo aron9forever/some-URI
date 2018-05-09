@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Job } from './job';
+import { Job, JobType } from './job';
+import { Property } from './property';
+import { Supplier } from './supplier';
 import { Observable } from 'rxjs/Rx';
 import { catchError, map, tap } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -12,8 +14,18 @@ const httpOptions = {
 @Injectable()
 export class JobService {
   private jobsUrl = '/job';  // URL to web api
+  private jobTypesUrl = '/job_type';  // URL to web api
+  private PropertiesUrl = '/property';  // URL to web api
+  private SuppliersUrl = '/supplier';  // URL to web api
 
-  constructor(private http: HttpClient) { }
+  jobs: Job[];
+  public jobTypes: JobType[];
+  public suppliers: Supplier[];
+  public properties: Property[];
+
+  constructor(private http: HttpClient) {
+    this.eagerLoad();
+  }
 
   /**
   * Handle Http operation that failed.
@@ -40,9 +52,24 @@ export class JobService {
     );
   }
 
+  postJob(job: Job): Observable<Job> {
+    const url = environment.apiEndpoint + this.jobsUrl;
+    return this.http.post<Job>(url, job, httpOptions).pipe(
+      catchError(this.handleError<Job>(`addJob`))
+    );
+  }
+
+  addJob(job: Job): void {
+    this.postJob(job)
+      .subscribe(job => {
+      this.jobs.push(job);
+      new Alert('success', 'Job details have been added and saved!').push();
+      });
+  }
+
   saveJob(job: Job): Observable<Job> {
     const url = `${environment.apiEndpoint}${this.jobsUrl}/${job.id}`;
-    console.log("job saved? " + url);
+    new Alert('success', 'Job details have been saved!').push();
     return this.http.patch<Job>(url, job, httpOptions).pipe(
       catchError(this.handleError<Job>(`saveJob id=${job.id}`))
     );
@@ -53,6 +80,41 @@ export class JobService {
     .pipe(
       catchError(this.handleError('getJobs', []))
     );
+  }
+
+  getJobTypes(): Observable<JobType[]> {
+    return this.http.get<JobType[]>(environment.apiEndpoint + this.jobTypesUrl)
+    .pipe(
+      catchError(this.handleError('getJobTypes', []))
+    );
+  }
+
+  getProperties(): Observable<Property[]> {
+    return this.http.get<Property[]>(environment.apiEndpoint + this.PropertiesUrl)
+    .pipe(
+      catchError(this.handleError('getProperties', []))
+    );
+  }
+
+  getSuppliers(): Observable<Supplier[]> {
+    return this.http.get<Supplier[]>(environment.apiEndpoint + this.SuppliersUrl)
+    .pipe(
+      catchError(this.handleError('getSuppliers', []))
+    );
+  }
+
+  eagerLoad(): void {
+    this.getSuppliers()
+      .subscribe(suppliers => {this.suppliers = suppliers});
+
+    this.getProperties()
+      .subscribe(properties => {this.properties = properties});
+
+    this.getJobTypes()
+      .subscribe(jobTypes => {this.jobTypes = jobTypes});
+
+    this.getJobs()
+      .subscribe(jobs => {this.jobs = jobs});
   }
 
 }

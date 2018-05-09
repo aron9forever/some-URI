@@ -11,3 +11,8 @@ tbody>tr.selected {
     background-color: #e9ecef;
     border: 2px dotted black;
 }
+
+.nopadding {
+   padding: 0 !important;
+   margin: 0 !important;
+}

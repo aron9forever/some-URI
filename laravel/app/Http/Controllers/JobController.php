@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Job;
 use App\JobType;
+use App\Property;
 use Illuminate\Http\Request;
 
 
@@ -54,12 +55,12 @@ class JobController extends Controller
             'notes' => 'max:65000'
         ]);
 
-        /*if($property = Property::find($request->property_address)) {*/
+        if($property = Property::find($request->property_address)) {
             return $property->jobs()->create($request->only(['supplier_title', 'job_type', 'notes']));
-            /*}
+        }
 
         //This shouldn't happen unless someone is tampering with the forms or manually POSTing
-        return response()->json('', 404);*/
+        return response()->json('', 404);
     }
 
     /**
